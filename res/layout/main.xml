@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent" >
+
+    <cn.com.xpai.Preview
+        android:id="@+id/preview_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+	<include layout="@layout/info"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            <Button
+                android:id="@+id/btn_connection"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/link_break" />
+
+            <Button
+                android:id="@+id/btn_change_camera"
+                android:layout_width="56dp"
+                android:layout_height="36dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/change_camera_id" />
+
+            <Button
+                android:id="@+id/btn_preview"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/preview_inactive" />
+
+            <Button
+                android:id="@+id/btn_setting"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/setting" />
+
+            <Button
+                android:id="@+id/btn_player"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/media_player" />
+
+        </LinearLayout>
+
+        <ZoomControls
+            android:id="@+id/camera_zoom_control"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+		<LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:layout_weight="21.35"
+		    android:gravity="center|fill_horizontal|right"
+		    android:orientation="vertical" >
+		    
+		    <cn.com.xpai.RecordButton
+		        android:id="@+id/btn_record"
+		        style="?android:attr/buttonStyleSmall"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_vertical|right"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginTop="100dp"
+		        android:background="@drawable/record"
+		        android:gravity="center_vertical|right" />
+
+		    <Button
+		        android:id="@+id/btn_record_pause"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="right"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginTop="20dp"
+		        android:background="@drawable/record_pause"
+		        android:visibility="invisible" />
+		    
+			<Button
+			    android:id="@+id/btn_mute"
+			    style="?android:attr/buttonStyleSmall"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:layout_marginRight="20dp"
+			     android:layout_marginTop="20dp"
+			    android:background="@drawable/mic_mute"
+			    android:gravity="bottom|right"
+			     />
+		    
+		    <Button
+		        android:id="@+id/btn_take_picture"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="right"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginTop="20dp"
+		        android:background="@drawable/take_picture"
+		        android:visibility="gone" />
+		</LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

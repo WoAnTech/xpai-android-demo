@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+     >
+     <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_margin="5dp"
+        android:layout_marginTop="7dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+     <RadioGroup 
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txt_title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+         >
+         
+         <RadioButton
+        android:id="@+id/amr_nb_radio_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="AMR_NB"
+         />
+         
+         <RadioButton
+        android:id="@+id/aac_radio_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="30dp"
+        android:text="AAC"
+        
+         />
+         
+     </RadioGroup>
+    
+     <LinearLayout 
+        android:id="@+id/sample_rate_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignLeft="@+id/radioGroup"
+        android:layout_below="@+id/radioGroup"
+        android:layout_marginTop="8dp"
+         >
+    
+    <TextView
+        android:id="@+id/sample_rate_txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="采样率:"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        />
+    
+    <Spinner
+        android:id="@+id/sample_rate_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        />
+    
+    <TextView 
+        android:id="@+id/sample_rate_txt_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="采样率:"
+        android:layout_marginLeft="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:visibility="gone"
+        />
+    
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/bit_rate_txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="比特率:"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:layout_alignLeft="@+id/sample_rate_ll"
+        android:layout_below="@+id/sample_rate_ll"
+        />
+    
+    <TextView
+        android:id="@+id/bit_rate_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"
+        android:text="12200"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:layout_alignBottom="@+id/bit_rate_txt_name"
+        android:layout_toRightOf="@+id/bit_rate_txt_name"
+        />
+    
+    <LinearLayout 
+        android:id="@+id/bit_rate_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_alignLeft="@+id/bit_rate_txt_name"
+        android:layout_below="@+id/bit_rate_txt_name"
+         >
+    <TextView
+        android:id="@+id/min_bit_rate_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="最小值"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        />
+    
+    <SeekBar
+        android:id="@+id/seek_bar"
+        android:layout_width="150dp"
+        android:layout_marginTop="18dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+	    android:progress="0"
+        android:layout_margin="7dp" />
+    
+    <TextView
+        android:id="@+id/max_bit_rate_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="最大值"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/channel_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignLeft="@+id/bit_rate_ll"
+        android:layout_below="@+id/bit_rate_ll"
+        android:layout_marginTop="8dp"
+         >
+    <TextView
+        android:id="@+id/channel_txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="声    道:"
+        android:gravity="bottom"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        />
+    
+    <Spinner
+        android:id="@+id/channel_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        />
+    
+    <TextView 
+        android:id="@+id/channel_txt_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="1"
+        android:layout_marginLeft="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:visibility="gone"
+        />
+    
+    </LinearLayout>
+
+</RelativeLayout>

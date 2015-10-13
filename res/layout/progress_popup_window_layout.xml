@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:paddingTop="5dip"
+    android:paddingBottom="20dip"
+    android:background="@drawable/tipbg">
+    <TextView 
+        android:id="@+id/progress_popup_window_layout_title"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentLeft="true"
+         android:textStyle="bold"
+         android:textSize="20sp"/>
+    
+    <ProgressBar
+        android:id="@+id/progress_popup_window_layout_progress_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dip"
+        android:layout_below="@id/progress_popup_window_layout_title"
+        android:progressDrawable="@drawable/seek_bar"/>
+    
+    <TextView 
+        android:id="@+id/progress_popup_window_layout_progress_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_marginTop="5dip"
+        android:layout_below="@id/progress_popup_window_layout_title"
+        android:layout_toRightOf="@id/progress_popup_window_layout_progress_bar"
+        android:textSize="18sp"/>
+    
+    <Button 
+        android:id="@+id/progress_popup_window_layout_cancle_btn"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/progress_popup_window_layout_progress_tv"
+        android:layout_marginTop="10dip"
+        android:paddingTop="5dip"
+        android:paddingBottom="5dip"
+		
+        android:text="取消"
+        android:textSize="20dip"/>
+    android:background="@drawable/cancle_button"
+</RelativeLayout>

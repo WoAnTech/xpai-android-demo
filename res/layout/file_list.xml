@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:onClick="onInputBtnClick" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0096ff" >
+
+            <ImageView
+                android:id="@+id/fileRefreshView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:padding="6dp"
+                android:src="@drawable/ic_file_refresh" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="17dp"
+                android:layout_toLeftOf="@id/fileRefreshView"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp"
+                android:text="视频文件列表"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/button_input"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="false"
+                android:layout_centerInParent="false"
+                android:layout_centerVertical="true"
+                android:onClick="onInputBtnClick"
+                android:text="手工输入播放地址" />
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/fileListView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffffff"
+            android:divider="#eeeeee"
+            android:dividerHeight="1dp" >
+        </ListView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/scanInfoView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#eeeeee"
+        android:maxLines="1"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+		android:paddingLeft="8dp"
+        android:text="裤兜列表"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

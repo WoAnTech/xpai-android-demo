@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+	  <item android:id="@android:id/background"> // 背景项
+        <nine-patch android:src="@drawable/progress_no_bg" /> // 背景图 // 这里使用9文件，因此这么配置如果使用的是普通图片可直接使用<drawable />标签，或者使用<shape />标签，自定义图形
+    </item>
+    <item android:id="@android:id/progress"> // 进度项
+        <clip>
+            <nine-patch android:src="@drawable/progress_bg" /> // 进度图
+        </clip>
+    </item>
+
+</layer-list>     

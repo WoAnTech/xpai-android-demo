@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Xpai</string>
+	<string name="XPHost">113.11.194.211</string>
+	<string name="XPPort">2222</string>
+	<!-- Dialog View String -->
+	<!-- Connection Dialog -->
+	<string name="connection_dialog_title">Connection</string>
+	<string name="connection_dialog_code">服务码</string>
+	<string name="connection_dialog_host">主机地址</string>
+	<string name="connection_dialog_port">主机端口</string>
+	<string name="connection_dialog_connect_zhiboyun">连接直播云</string>
+	<string name="connection_dialog_connect_tcp">直连TCP端口</string>
+	<string name="connection_dialog_connect">Connect</string>
+	<string name="connection_dialog_cancel">取消</string>
+
+	<!-- Message Dialog -->
+	<string name="msg_dialog_title">Error</string>
+	<string name="msg_dialog_ok">OK</string>
+
+	<!-- Error Dialog -->
+	<string name="error_dialog_title">Error</string>
+	<string name="error_dialog_ok">OK</string>
+
+	<!-- Connection Failed Dialog -->
+	<string name="connection_failed_dialog_connect">Try again</string>
+	<string name="connection_failed_dialog_exit">Exit</string>
+
+	<!-- Login Dialog -->
+	<string name="login_dialog_title">用户登录</string>
+	<string name="login_dialog_username">用户名</string>
+	<string name="login_dialog_password">密码</string>
+	<string name="login_dialog_ok">OK</string>
+	<string name="login_dialog_cancel">Cancel</string>
+
+	<!-- Setting Dialog -->
+	<string name="setting_dialog_title">Setting</string>
+	<string name="setting_dialog_codec_id">Codec ID</string>
+	<string name="setting_dialog_codec_id_mpeg2">MPEG2</string>
+	<string name="setting_dialog_codec_id_mpeg4">MPEG4</string>
+	<string name="setting_dialog_img_width">Photo Width</string>
+	<string name="setting_dialog_img_height">Photo Height</string>
+	<string name="setting_dialog_video_width">Video Width</string>
+	<string name="setting_dialog_video_height">Video Height</string>
+	<string name="setting_dialog_bitrate">Bit Rate</string>
+	<string name="setting_dialog_framerate">Frame Rate</string>
+	<string name="setting_dialog_timeout">Network Time Out</string>
+	<string name="dialog_confirm">确认</string>
+	<string name="dialog_cancel">取消</string>
+	<string name="go">go</string>
+    <string name="nulltime">--:--:--</string>
+    <string name="disconnect">断开连接</string>
+    
+    <!-- 视频打点输入开始结束时间 Dialog -->
+    <string name="transcode_dialog_title">文件打点</string>
+    <string name="transcode_dialog_starttime">开始时间(秒)</string>
+	<string name="transcode_dialog_duration">视频长度(秒)</string>
+	
+</resources>
