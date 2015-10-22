@@ -1,4 +1,5 @@
+bin/*
 gen/
-bin/
 jni/
 core/
+!bin/mini.apk
