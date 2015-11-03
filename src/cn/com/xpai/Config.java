@@ -20,11 +20,13 @@ public class Config {
 	static String mvPort_default = "9999";
 	//通过connectCloud api与直播云建立连接
 	static String getVSUrl = "http://c.zhiboyun.com/api/20140928/get_vs";
+	//连接私有云(其中192.168.1.1只是个例子，具体填写私有云服务器地址)
+	static String privateCloudGetVSUrl = "http://192.168.1.1/api/20140928/get_vs";
 	static String serviceCode = "";
 	static String output_tag = "";
 	static boolean isOpenNetWorkingAdaptive = true;
 	static boolean isConnectToTcpPort = false;
-	static boolean isConnectToZhiBoYun = false;
+	static int connectionMode = 0;//0:连接直播云 1:连接私有云 2:连接视频服务器
 	//音频编码类型 默认为AMR_NB
 	static AudioEncoderType audioEncoderType = AudioEncoderType.AMR_NB;
 	//声道
@@ -80,7 +82,6 @@ public class Config {
 		fpsRange[0] = sp.getInt("min_fps", 0);
 		fpsRange[1] = sp.getInt("max_fps", 0);
 		isConnectToTcpPort = sp.getBoolean("is_connect_to_tcp", false);
-		isConnectToZhiBoYun = sp.getBoolean("is_connect_to_zhiboyun", false);
 		output_tag = sp.getString("output_tag", output_tag);
 		isOpenNetWorkingAdaptive = sp.getBoolean("net_adaptive", isOpenNetWorkingAdaptive);
 		int at_value = sp.getInt("audio_encoder_type", cast(audioEncoderType));
@@ -92,6 +93,8 @@ public class Config {
 		channel = sp.getInt("channel", channel);
 		audioSampleRate = sp.getInt("audio_sample_rate", audioSampleRate);
 		audioBitRate = sp.getInt("audio_bit_rate", audioBitRate);
+		connectionMode = sp.getInt("connection_mode", connectionMode);
+		privateCloudGetVSUrl = sp.getString("p_getvs_url", privateCloudGetVSUrl);
 	}
 	
 	static void save() {
@@ -115,13 +118,14 @@ public class Config {
 		editor.putInt("min_fps", fpsRange[0]);
 		editor.putInt("max_fps", fpsRange[1]);
 		editor.putBoolean("is_connect_to_tcp", isConnectToTcpPort);
-		editor.putBoolean("is_connect_to_zhiboyun", isConnectToZhiBoYun);
 		editor.putString("output_tag", output_tag);
 		editor.putBoolean("net_adaptive", isOpenNetWorkingAdaptive);
 		editor.putInt("audio_encoder_type", cast(audioEncoderType));
 		editor.putInt("channel", channel);
 		editor.putInt("audio_sample_rate", audioSampleRate);
 		editor.putInt("audio_bit_rate", audioBitRate);
+		editor.putInt("connection_mode", connectionMode);
+		editor.putString("p_getvs_url", privateCloudGetVSUrl);
 		editor.commit();
 	}
 	

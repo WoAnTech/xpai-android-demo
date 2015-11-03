@@ -3,3 +3,4 @@ gen/
 jni/
 core/
 !bin/mini.apk
+.DS_Store

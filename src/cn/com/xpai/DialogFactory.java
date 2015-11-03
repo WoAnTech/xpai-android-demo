@@ -8,14 +8,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Message;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import cn.com.xpai.core.Manager;
 
 public class DialogFactory {
@@ -31,6 +35,14 @@ public class DialogFactory {
 	public static final int MSG_DIALOG = 0x20006;
 	public static final int INFO_DIALOG = 0x20007;
 	public static final int SETTING_DIALOG = 0x20008;
+	private static final String[] connectionModes = {"连接直播云", "连接私有云", "连接视频服务器"};
+	private static View connectionEntryView;
+	private static CheckBox connectTcpCheckBox;
+	private static TextView mvHostTV;
+	private static TextView mvPortTV;
+	private static EditText mvCodeET;
+	private static EditText mvHostET;
+	private static EditText mvPortET;
 
 	public static void register(Context context) {
 		mContext = context;
@@ -72,15 +84,53 @@ public class DialogFactory {
 		return dialog;
 	}
 
-	@SuppressLint("NewApi")
 	private static Dialog ConnectionDialog() {
 		LayoutInflater factory = LayoutInflater.from(mContext);
-		final View connectionEntryView = factory.inflate(
+		connectionEntryView = factory.inflate(
 				R.layout.connection_dialog, null);
-		final CheckBox connectTcpCheckBox = (CheckBox) connectionEntryView
+		connectTcpCheckBox = (CheckBox) connectionEntryView
 				.findViewById(R.id.mvconnect_tcp_checkbox);
-		final CheckBox mCheckBox = (CheckBox) connectionEntryView
-				.findViewById(R.id.mvconnect_checkbox);
+		mvHostTV = (TextView) connectionEntryView
+				.findViewById(R.id.mvhost_view);
+		mvPortTV = (TextView) connectionEntryView
+				.findViewById(R.id.mvport_view);
+		mvCodeET = (EditText) connectionEntryView
+				.findViewById(R.id.mvcode_edit);
+		mvHostET = (EditText) connectionEntryView
+				.findViewById(R.id.mvhost_edit);
+		mvPortET = (EditText) connectionEntryView
+				.findViewById(R.id.mvport_edit);
+		Spinner mSpinner = (Spinner) connectionEntryView
+				.findViewById(R.id.connection_mode_spinner);
+		ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(mContext,
+				android.R.layout.simple_spinner_item, connectionModes);
+		mSpinner.setAdapter(mAdapter);
+		mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
+		for (int position=0;position<connectionModes.length;position++) {
+			if (Config.connectionMode == position) {
+				mSpinner.setSelection(position);
+				break;
+			}
+		}
+
+		mSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Config.connectionMode = position;
+				updateView();
+				Config.save();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+			}
+		});
+
+		updateView();
+
 		if(Config.isConnectToTcpPort) {
 			connectTcpCheckBox.setChecked(true);
 		} else {
@@ -93,49 +143,45 @@ public class DialogFactory {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
-								String mCode = ((EditText) connectionEntryView
-										.findViewById(R.id.mvcode_edit))
-										.getText().toString();
-								String mHost = ((EditText) connectionEntryView
-										.findViewById(R.id.mvhost_edit))
-										.getText().toString();
-								String mPort = ((EditText) connectionEntryView
-										.findViewById(R.id.mvport_edit))
-										.getText().toString();
-								
+								String mCode = mvCodeET.getText().toString();
+								String mHost = mvHostET.getText().toString();
+								String mPort = mvPortET.getText().toString();
 								Config.serviceCode = mCode;
-								Config.mvHost = mHost;
 								Config.mvPort = mPort;
-								if(Config.isConnectToTcpPort &&
+								if(Config.connectionMode == 2 &&
 										(mPort == null || "".equals(mPort))) {
 									Toast.makeText(mContext, "端口号不能为空!", Toast.LENGTH_LONG).show();
 									return;
 								}
-								if(connectTcpCheckBox.isChecked()) {
-									Config.isConnectToTcpPort = true;
-									try {
-										Manager.connectVS(mHost, Integer.parseInt(mPort), 
-													Config.netTimeout * 1000, Config.serviceCode, 0);
-									} catch (NumberFormatException e) {
-										// TODO Auto-generated catch block
-										Toast.makeText(mContext, "非法的端口号!", Toast.LENGTH_LONG).show();
-										e.printStackTrace();
+
+								if (Config.connectionMode == 2) {
+									Config.mvHost = mHost;
+									if (Config.isConnectToTcpPort) {
+										try {
+											Manager.connectVS(mHost, Integer.parseInt(mPort), 
+														Config.netTimeout * 1000, Config.serviceCode, 0);
+										} catch (NumberFormatException e) {
+											// TODO Auto-generated catch block
+											Toast.makeText(mContext, "非法的端口号!", Toast.LENGTH_LONG).show();
+											e.printStackTrace();
+										}
+									} else {
+										try {
+											Manager.initNet(mHost, Integer.parseInt(mPort), 
+														Config.netTimeout * 1000, Config.serviceCode, 0);
+										} catch (NumberFormatException e) {
+											// TODO Auto-generated catch block
+											Toast.makeText(mContext, "非法的端口号!", Toast.LENGTH_LONG).show();
+											e.printStackTrace();
+										}
 									}
-								} else if(mCheckBox.isChecked()) {
-									Config.isConnectToTcpPort = false;
+								} else if(Config.connectionMode == 0) {
 									Manager.connectCloud(Config.getVSUrl,
 											Config.netTimeout * 1000, Config.serviceCode, 0);
 								} else {
-									Config.isConnectToZhiBoYun = false;
-									Config.isConnectToTcpPort = false;
-									try {
-										Manager.initNet(mHost, Integer.parseInt(mPort), 
-													Config.netTimeout * 1000, Config.serviceCode, 0);
-									} catch (NumberFormatException e) {
-										// TODO Auto-generated catch block
-										Toast.makeText(mContext, "非法的端口号!", Toast.LENGTH_LONG).show();
-										e.printStackTrace();
-									}
+									Config.privateCloudGetVSUrl = mHost;
+									Manager.connectCloud(Config.privateCloudGetVSUrl,
+											Config.netTimeout * 1000, Config.serviceCode, 0);
 								}
 								Config.save();
 							}
@@ -151,71 +197,54 @@ public class DialogFactory {
 								Config.save();
 							}
 						}).create();
-		((EditText) connectionEntryView.findViewById(R.id.mvcode_edit))
-		.setText(Config.serviceCode);
-		final EditText mvHostET = (EditText) connectionEntryView
-				.findViewById(R.id.mvhost_edit);
-		mvHostET.setText(Config.mvHost);
-		final EditText mvPortET = (EditText) connectionEntryView
-				.findViewById(R.id.mvport_edit);
+		mvCodeET.setText(Config.serviceCode);
 		mvPortET.setText(Config.mvPort);
-		if(Config.isConnectToZhiBoYun) {
-			mCheckBox.setChecked(true);
-			updataView(true, mvHostET, mvPortET, mCheckBox, connectTcpCheckBox);
-		} else {
-			mCheckBox.setChecked(false);
-			updataView(false, mvHostET, mvPortET, mCheckBox, connectTcpCheckBox);
-		}
-		mCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@SuppressLint("NewApi")
-			@Override
-			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-				// TODO Auto-generated method stub
-				updataView(isChecked, mvHostET, mvPortET, mCheckBox, connectTcpCheckBox);
-			}
-		});
 		
 		connectTcpCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// TODO Auto-generated method stub
-				if (isChecked) {
-					updataView(!isChecked, mvHostET, mvPortET, mCheckBox, connectTcpCheckBox);
-				}
+				Config.isConnectToTcpPort = isChecked;
+				Config.save();
 			}
 		});
 		return dialog;
 	}
 
-	@SuppressLint("NewApi")
-	private static void updataView(boolean isChecked, EditText mvHostET,
-			EditText mvPortET, CheckBox connectZBYCheckBox, CheckBox connectTcpCheckBox){
-		if(isChecked) {
+	private static void updateView() {
+		switch(Config.connectionMode) {
+		case 0:
+			mvPortTV.setVisibility(View.GONE);
+			mvPortET.setVisibility(View.GONE);
+			connectTcpCheckBox.setVisibility(View.GONE);
 			mvHostET.setInputType(InputType.TYPE_NULL);
-			mvHostET.getBackground().setAlpha(100);
-			mvPortET.setInputType(InputType.TYPE_NULL);
-			mvPortET.getBackground().setAlpha(100);
-			connectTcpCheckBox.setChecked(false);
-			connectTcpCheckBox.setAlpha(100);
-			Config.isConnectToZhiBoYun = true;
-			Config.isConnectToTcpPort = false;
-		} else {
+			mvHostET.setVisibility(View.GONE);
+			mvHostTV.setVisibility(View.GONE);
+			break;
+		case 1:
+			mvPortTV.setVisibility(View.GONE);
+			mvPortET.setVisibility(View.GONE);
+			connectTcpCheckBox.setVisibility(View.GONE);
+			mvHostET.setVisibility(View.VISIBLE);
+			mvHostTV.setVisibility(View.VISIBLE);
+			mvHostET.setText(Config.privateCloudGetVSUrl);
+			mvHostTV.setText("getVS地址");
+			break;
+		case 2:
+			mvPortTV.setVisibility(View.VISIBLE);
+			mvPortET.setVisibility(View.VISIBLE);
+			connectTcpCheckBox.setVisibility(View.VISIBLE);
+			mvHostET.setVisibility(View.VISIBLE);
+			mvHostTV.setVisibility(View.VISIBLE);
 			mvHostET.setText(Config.mvHost);
-			mvHostET.setInputType(InputType.TYPE_CLASS_TEXT);
-			mvHostET.getBackground().setAlpha(255);
-			mvPortET.setText(Config.mvPort);
-			mvPortET.setInputType(InputType.TYPE_CLASS_TEXT);
-			mvPortET.getBackground().setAlpha(255);
-			connectZBYCheckBox.setChecked(false);
-			connectTcpCheckBox.setAlpha(255);
-			Config.isConnectToZhiBoYun = false;
-			Config.isConnectToTcpPort = true;
+			mvHostTV.setText("主机地址");
+			break;
+		default:
+			break;
 		}
-		Config.save();
 	}
-	
+
 	private static Dialog AlertDialog(String msg) {
 		return new AlertDialog.Builder(mContext).setIcon(R.drawable.alert)
 				.setTitle(R.string.msg_dialog_title).setMessage(msg)

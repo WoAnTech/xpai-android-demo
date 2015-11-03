@@ -83,8 +83,8 @@ public class XPAndroid extends Activity {
 		List<Manager.Resolution> res_list = Manager.getSupportedVideoResolutions();
 		if (null != res_list && res_list.size() > 0) {
 			if (0 == Config.videoWidth || 0 == Config.videoHeight) {
-				//使用第一个可用分辨率作为默认分辨率
-				Manager.Resolution res = res_list.get(0);
+				//默认使用适中的分辨率
+				Manager.Resolution res = res_list.get((int)(res_list.size()/2));
 				Config.videoWidth = res.width;
 				Config.videoHeight = res.height;
 				Config.videoBitRate = res.width;
