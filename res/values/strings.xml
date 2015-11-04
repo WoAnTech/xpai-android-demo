@@ -12,7 +12,7 @@
 	<string name="connection_dialog_port">主机端口</string>
 	<string name="connection_dialog_connect_zhiboyun">连接直播云</string>
 	<string name="connection_dialog_connect_tcp">直连TCP端口</string>
-	<string name="connection_dialog_connect">Connect</string>
+	<string name="connection_dialog_connect">连接</string>
 	<string name="connection_dialog_cancel">取消</string>
 
 	<!-- Message Dialog -->

@@ -218,7 +218,6 @@ public class DialogFactory {
 			mvPortTV.setVisibility(View.GONE);
 			mvPortET.setVisibility(View.GONE);
 			connectTcpCheckBox.setVisibility(View.GONE);
-			mvHostET.setInputType(InputType.TYPE_NULL);
 			mvHostET.setVisibility(View.GONE);
 			mvHostTV.setVisibility(View.GONE);
 			break;
