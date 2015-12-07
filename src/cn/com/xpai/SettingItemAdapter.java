@@ -26,6 +26,7 @@ public class SettingItemAdapter extends BaseAdapter implements OnItemClickListen
 	private PopEditTextView popEditText;
 	private PopListView netWorkingAdaptive;
 	private PopAudioEncoderTypeView audioEncoderTypeLV;
+	private PopListView isSavingVideoFile;
 	private Activity activity;
 	final private int MENU_RESOLUTION_IDX = 0;
 	final private int MENU_BITRATE_IDX = 1;
@@ -35,6 +36,7 @@ public class SettingItemAdapter extends BaseAdapter implements OnItemClickListen
 	final private int MENU_OUTPUT_TAG_IDX = 5;
 	final private int MENU_NETWORKING_ADAPTIVE_IDX = 6;
 	final private int MENU_AUDIO_ENCODER_TYPE_IDX = 7;
+	final private int MENU_IS_SAVING_VIDEO_FILE_IDX = 8;
 	
 	SettingItemAdapter(Activity activity) {
 		context = activity.getBaseContext();
@@ -86,6 +88,8 @@ public class SettingItemAdapter extends BaseAdapter implements OnItemClickListen
 						Config.audioSampleRate, Config.audioBitRate);
 			}
 		});
+		isSavingVideoFile = new PopListView(activity,
+				new SaveVideoFileAdapter(activity, this), "是否保存视频文件");
 	}
 	
 	@Override
@@ -143,6 +147,9 @@ public class SettingItemAdapter extends BaseAdapter implements OnItemClickListen
         	viewCache.txtValue.setText(Config.audioEncoderType == AudioEncoderType.AMR_NB?
         			"AMR_NB":"AAC");
         	break;
+        case MENU_IS_SAVING_VIDEO_FILE_IDX:
+        viewCache.txtValue.setText(Config.isSavingVideoFile? "是":"否");
+        break;
         }
         return convert_view; 
 	}
@@ -154,7 +161,7 @@ public class SettingItemAdapter extends BaseAdapter implements OnItemClickListen
 	}
 
 	private String [] settingName = new String []{"分辨率", "码流", "网络超时","录制类型",
-			"FPS", "输出格式标签", "网络自适应", "音频编码参数"};
+			"FPS", "输出格式标签", "网络自适应", "音频编码参数", "保存视频文件"};
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -200,6 +207,9 @@ public class SettingItemAdapter extends BaseAdapter implements OnItemClickListen
 			audioEncoderTypeLV.showAtLocation(activity.findViewById(R.id.btn_setting),
 					 Gravity.LEFT, pos_x, 10);
 			break;
+		case MENU_IS_SAVING_VIDEO_FILE_IDX:
+			isSavingVideoFile.showAtLocation(activity.findViewById(R.id.btn_setting),
+					 Gravity.LEFT, pos_x, 10);
 		}
 	
 	}

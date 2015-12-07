@@ -28,8 +28,9 @@ public class RecordButton extends Button {
 					} else {
 						output_tag = Config.output_tag;
 					}
+					boolean isSavingVideoFile = Manager.isConnected()? Config.isSavingVideoFile:true;
 					if (!Manager.startRecord(Config.recordMode, Config.videoBitRate * 1024,
-							true, false, output_tag, "testing opaque string")){
+							isSavingVideoFile, false, output_tag, "testing opaque string")){
 						//@Todo 启动录制失败，显示错误信息
 					}
 				}

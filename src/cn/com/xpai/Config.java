@@ -25,6 +25,7 @@ public class Config {
 	static String serviceCode = "";
 	static String output_tag = "";
 	static boolean isOpenNetWorkingAdaptive = true;
+	static boolean isSavingVideoFile = false;
 	static boolean isConnectToTcpPort = false;
 	static int connectionMode = 0;//0:连接直播云 1:连接私有云 2:连接视频服务器
 	//音频编码类型 默认为AMR_NB
@@ -95,6 +96,7 @@ public class Config {
 		audioBitRate = sp.getInt("audio_bit_rate", audioBitRate);
 		connectionMode = sp.getInt("connection_mode", connectionMode);
 		privateCloudGetVSUrl = sp.getString("p_getvs_url", privateCloudGetVSUrl);
+		isSavingVideoFile = sp.getBoolean("is_saving_video_file", isSavingVideoFile);
 	}
 	
 	static void save() {
@@ -126,6 +128,7 @@ public class Config {
 		editor.putInt("audio_bit_rate", audioBitRate);
 		editor.putInt("connection_mode", connectionMode);
 		editor.putString("p_getvs_url", privateCloudGetVSUrl);
+		editor.putBoolean("is_saving_video_file", isSavingVideoFile);
 		editor.commit();
 	}
 	
