@@ -1,36 +1,34 @@
 package cn.com.xpai.demo.player;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.cnnt.player.Player;
+import org.cnnt.player.Surface;
+
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
-
 import cn.com.xpai.R;
-import cn.com.xpai.R.drawable;
-import cn.com.xpai.R.id;
-import cn.com.xpai.R.layout;
-
-import org.cnnt.player.Player;
-import org.cnnt.player.Surface;
-import org.cnnt.player.Player.FullscreenMode;
 
 
 public class DemoPlayer extends Activity implements OnGestureListener {
@@ -48,6 +46,7 @@ public class DemoPlayer extends Activity implements OnGestureListener {
 
 	private SeekUpdater seekUpdater = null;
 	private GestureDetector gestureDetector = null;
+	private Timer timer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +237,8 @@ public class DemoPlayer extends Activity implements OnGestureListener {
 				totalTime = player.getDuration();
 				seekTo = totalTime / 1000 * progress;
 				player.seekTo(seekTo);
+				if(seekUpdater != null)
+					seekUpdater.startIt();
 			}
 		}
 
@@ -250,6 +251,8 @@ public class DemoPlayer extends Activity implements OnGestureListener {
 		@Override
 		public void onStartTrackingTouch(SeekBar seekBar) {
 			// TODO Auto-generated method stub
+			if(seekUpdater != null)
+			   seekUpdater.stopIt();
 		}
 	};
 
@@ -260,7 +263,6 @@ public class DemoPlayer extends Activity implements OnGestureListener {
 					|| (mHideContainer.getVisibility() == View.INVISIBLE)) {
 				if (seekUpdater != null) {
 					seekUpdater.startIt();
-					seekUpdater.refresh();
 				}
 				mHideContainer.setVisibility(View.VISIBLE);
 			} else {
@@ -310,11 +312,18 @@ public class DemoPlayer extends Activity implements OnGestureListener {
 
 	private class SeekUpdater {
 		public void startIt() {
-			handler.sendEmptyMessage(Player.MSG_PROGRESS_UPDATE);
+			timer = new Timer();
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					handler.sendEmptyMessage(Player.MSG_PROGRESS_UPDATE);
+				}
+			}, 1000, 1000);
 		}
 
 		public void stopIt() {
-			handler.removeMessages(Player.MSG_PROGRESS_UPDATE);
+			if (timer != null)
+				timer.cancel();
 		}
 
 		public void refresh() {
@@ -329,7 +338,6 @@ public class DemoPlayer extends Activity implements OnGestureListener {
 					mSeekBar.setProgress(progress);
 				}
 			}
-			handler.sendEmptyMessageDelayed(Player.MSG_PROGRESS_UPDATE, 500);
 		}
 		
 	}
@@ -377,7 +385,6 @@ public class DemoPlayer extends Activity implements OnGestureListener {
 				|| (mHideContainer.getVisibility() == View.INVISIBLE)) {
 			if (seekUpdater != null) {
 				seekUpdater.startIt();
-				seekUpdater.refresh();
 			}
 			mHideContainer.setVisibility(View.VISIBLE);
 
