@@ -69,6 +69,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center" />
+        <ImageButton
+            android:id="@+id/preview_camera_flashlight_ibtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/camera_flashlight_off"
+            android:background="@drawable/camera_switch_bg"/>
 
 		<LinearLayout
 		    android:layout_width="wrap_content"

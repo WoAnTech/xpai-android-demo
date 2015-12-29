@@ -9,8 +9,8 @@ public class Config {
 
 	final static String PREFS_NAME = "XPAndroid";
 
-	static String userName = "";
-	static String userPass = ""; //for test, not been encrypt.
+	static String userName = "user01";
+	static String userPass = "123"; //for test, not been encrypt.
 	static int timeOut = 5 * 1000;
 	static int retryConnectTimes = 3;
 
@@ -22,24 +22,24 @@ public class Config {
 	static String getVSUrl = "http://c.zhiboyun.com/api/20140928/get_vs";
 	//连接私有云(其中192.168.1.1只是个例子，具体填写私有云服务器地址)
 	static String privateCloudGetVSUrl = "http://192.168.1.1/api/20140928/get_vs";
-	static String serviceCode = "";
+	static String serviceCode = "THURNORX";
 	static String output_tag = "";
 	static boolean isOpenNetWorkingAdaptive = true;
-	static boolean isSavingVideoFile = false;
+	static boolean isSavingVideoFile = true;
 	static boolean isConnectToTcpPort = false;
 	static int connectionMode = 0;//0:连接直播云 1:连接私有云 2:连接视频服务器
 	//音频编码类型 默认为AMR_NB
-	static AudioEncoderType audioEncoderType = AudioEncoderType.AMR_NB;
+	static AudioEncoderType audioEncoderType = AudioEncoderType.AAC;
 	//声道
 	static int channel = 1;
 	//音频采样率
-	static int audioSampleRate = 8000;
+	static int audioSampleRate = 16000;
 	//音频比特率
-	static int audioBitRate = 12200;
+	static int audioBitRate = 16000;
 	static int hwMode = 0;
-	static int videoWidth = 0;
-	static int videoHeight = 0;
-	static int videoBitRate = 320; //bitrate单位kbit
+	static int videoWidth = 640;
+	static int videoHeight = 480;
+	static int videoBitRate = 640; //bitrate单位kbit
 
 	static int photoWidth = 2048;
 	static int photoHeight = 1536;

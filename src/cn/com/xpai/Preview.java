@@ -39,6 +39,8 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void surfaceCreated(SurfaceHolder holder) {
 		Manager.setPreviewSurface(this);
+		if (!Manager.isPreviewing())
+			Manager.startPreview();
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {

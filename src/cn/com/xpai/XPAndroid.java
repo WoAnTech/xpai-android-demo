@@ -1,44 +1,31 @@
 package cn.com.xpai;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import cn.com.xpai.core.Manager;
-import cn.com.xpai.core.Transcoder;
-import cn.com.xpai.demo.player.FilelistActivity;
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.hardware.Camera;
-import android.location.LocationManager;
-import android.os.Build;
+import android.hardware.Camera.Parameters;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
-import cn.com.xpai.core.Transcoder;
+import cn.com.xpai.core.Manager;
 
-@TargetApi(Build.VERSION_CODES.ECLAIR)
+@SuppressLint("NewApi")
 public class XPAndroid extends Activity {
 	/** Called when the activity is first created. */
 	private SurfaceView mPreview = null;
@@ -64,7 +51,13 @@ public class XPAndroid extends Activity {
 	public static XPAndroid getInstance() {
 		return instance;
 	}
+	
+	private int zoom, maxZoom;
+	private boolean zoomSupported;
+	private Camera camera;
+	private ImageButton previewFlashLightIbtn;
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,9 +78,9 @@ public class XPAndroid extends Activity {
 			if (0 == Config.videoWidth || 0 == Config.videoHeight) {
 				//默认使用适中的分辨率
 				Manager.Resolution res = res_list.get((int)(res_list.size()/2));
-				Config.videoWidth = res.width;
-				Config.videoHeight = res.height;
-				Config.videoBitRate = res.width;
+				//Config.videoWidth = res.width;
+				//Config.videoHeight = res.height;
+				//Config.videoBitRate = res.width;
 			}
 		} else {
 			Log.e(TAG, "cannto get supported resolutions");
@@ -115,6 +108,17 @@ public class XPAndroid extends Activity {
 		mPreview.setZOrderOnTop(false);
 		mainHandler = new MainHandler(this);
 		
+		camera = Manager.getCamera();
+		zoomSupported = camera.getParameters().isZoomSupported();
+		maxZoom = camera.getParameters().getMaxZoom();
+		previewFlashLightIbtn = (ImageButton) findViewById(R.id.preview_camera_flashlight_ibtn);
+		previewFlashLightIbtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				switchFlashLight();
+			}
+		});
 		/* 竖屏拍摄模式，请将注释打开
 		Manager.updateOrientation(90);
 		if (!Manager.forcePortrait(true)) {
@@ -228,5 +232,87 @@ public class XPAndroid extends Activity {
 			break;
 		}
 	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_ZOOM_IN:
+			changeZoom(true);
+			return true;
+		case KeyEvent.KEYCODE_ZOOM_OUT:
+			changeZoom(false);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	@SuppressLint("NewApi")
+	private void changeZoom(boolean isZoomIn) {
+		if (!zoomSupported || !Manager.isPreviewing())
+			return;
+		if (isZoomIn) {
+			if (zoom >= maxZoom)
+				return;
+			zoom++;
+		} else {
+			if (zoom <= 0)
+				return;
+			zoom--;
+		}
+		camera = Manager.getCamera();
+		Parameters parameters = camera.getParameters();
+		parameters.setZoom(zoom);
+		//cancleFocus();
+		camera.setParameters(parameters);
+		try {
+			Thread.sleep(250);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Log.i("zoomChange", zoom + "");
+		//autoFocusDelayed(400);
+	}
+	
+	private void switchFlashLight() {
+		camera = Manager.getCamera();
+		Parameters parameters = camera.getParameters();
+		String flashModel = parameters.getFlashMode();
+		if (flashModel == null)
+			return;
+		String validFlashMode = findSettableValue(parameters.getSupportedFlashModes(),
+				Parameters.FLASH_MODE_TORCH,
+				Parameters.FLASH_MODE_ON,
+				Parameters.FLASH_MODE_AUTO);
+		if (flashModel.equals(validFlashMode)) {
+			flashModel = Parameters.FLASH_MODE_OFF;
+			previewFlashLightIbtn
+					.setImageResource(R.drawable.camera_flashlight_off);
+		} else {
+			flashModel = validFlashMode;
+			previewFlashLightIbtn
+					.setImageResource(R.drawable.camera_flashlight_on);
+		}
+		parameters.setFlashMode(flashModel);
+		//cancleFocus();
+		camera.setParameters(parameters);
+		//autoFocus(lastX, lastY);
+	}
+	
+	private String findSettableValue(Collection<String> supportedValues,
+            String... desiredValues) {
+        //Log.i(TAG, "Supported values: " + supportedValues);
+        String result = null;
+        if (supportedValues != null) {
+            for (String desiredValue : desiredValues) {
+                if (supportedValues.contains(desiredValue)) {
+                    result = desiredValue;
+                    break;
+                }
+            }
+        }
+        //Log.i(TAG, "Settable value: " + result);
+        return result;
+    }
 
 }
