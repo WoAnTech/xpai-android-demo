@@ -3,22 +3,27 @@ package cn.com.xpai;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -56,6 +61,15 @@ public class XPAndroid extends Activity {
 	private boolean zoomSupported;
 	private Camera camera;
 	private ImageButton previewFlashLightIbtn;
+	private static final int AUTO_FOCUS = 18;
+	private ExecutorService ececutorService;
+	
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+		 if( msg.what == AUTO_FOCUS)
+			autoFocus();
+		}
+	};
 
 	@SuppressLint("NewApi")
 	@Override
@@ -108,8 +122,10 @@ public class XPAndroid extends Activity {
 		mPreview.setZOrderOnTop(false);
 		mainHandler = new MainHandler(this);
 		
+		ececutorService = ThreadPool.getInstance();
 		camera = Manager.getCamera();
 		zoomSupported = camera.getParameters().isZoomSupported();
+		Log.e(TAG, "zommSupported:" + zoomSupported);
 		maxZoom = camera.getParameters().getMaxZoom();
 		previewFlashLightIbtn = (ImageButton) findViewById(R.id.preview_camera_flashlight_ibtn);
 		previewFlashLightIbtn.setOnClickListener(new OnClickListener() {
@@ -263,7 +279,8 @@ public class XPAndroid extends Activity {
 		camera = Manager.getCamera();
 		Parameters parameters = camera.getParameters();
 		parameters.setZoom(zoom);
-		//cancleFocus();
+		parameters.setFocusMode(Parameters.FOCUS_MODE_AUTO);
+		cancleFocus();
 		camera.setParameters(parameters);
 		try {
 			Thread.sleep(250);
@@ -271,7 +288,7 @@ public class XPAndroid extends Activity {
 			e.printStackTrace();
 		}
 		Log.i("zoomChange", zoom + "");
-		//autoFocusDelayed(400);
+		autoFocusDelayed(400);
 	}
 	
 	private void switchFlashLight() {
@@ -294,9 +311,60 @@ public class XPAndroid extends Activity {
 					.setImageResource(R.drawable.camera_flashlight_on);
 		}
 		parameters.setFlashMode(flashModel);
-		//cancleFocus();
+		cancleFocus();
 		camera.setParameters(parameters);
-		//autoFocus(lastX, lastY);
+		autoFocus();
+	}
+	
+	private void autoFocusDelayed(long time) {
+		handler.removeMessages(AUTO_FOCUS);
+		handler.sendEmptyMessageDelayed(AUTO_FOCUS, time);
+	}
+	
+	private void cancleFocus() {
+		handler.removeMessages(AUTO_FOCUS);
+		if (camera != null) {
+			try {
+				camera.cancelAutoFocus();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void autoFocus(/*final float x, final float y*/) {
+		submit(new Runnable() {
+			@Override
+			public void run() {
+				cancleFocus();
+//				try {
+//					drawFocusSv.drawFocus(x, y);
+//				} catch (RuntimeException e) {
+//					e.printStackTrace();
+//					return;
+//				}
+				
+				try {
+					camera.autoFocus(new AutoFocusCallback() {
+						@Override
+						public void onAutoFocus(boolean success, Camera camera) {
+							Log.i(TAG, "onAutoFocus " + success);
+							//drawFocusSv.clearFocusDrawable();
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+					if (!Manager.isPreviewing()) {
+						//Manager.startPreview();
+					}
+					//drawFocusSv.clearFocusDrawable();
+				}
+			}
+		});
+	}
+	
+	protected void submit(Runnable runable) {
+		ececutorService.submit(runable);
 	}
 	
 	private String findSettableValue(Collection<String> supportedValues,
