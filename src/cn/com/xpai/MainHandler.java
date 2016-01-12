@@ -123,10 +123,10 @@ class MainHandler extends Handler {
 			break;
 		case RECORDING:
 			btnPreview.setVisibility(View.INVISIBLE);
-			btnChangeCamera.setVisibility(View.INVISIBLE);
+			//btnChangeCamera.setVisibility(View.INVISIBLE);
 			btnSetting.setVisibility(View.INVISIBLE);
 			btnPlayer.setVisibility(View.INVISIBLE);
-			btnChangeCamera.setVisibility(View.INVISIBLE);
+			//btnChangeCamera.setVisibility(View.INVISIBLE);
 			btnRecordPause.setVisibility(View.VISIBLE);
 			btnMute.setVisibility(View.VISIBLE);
 			if (pauseAnimation.hasStarted()) {
@@ -288,42 +288,11 @@ class MainHandler extends Handler {
 	private View.OnClickListener btnChangeCameraListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			boolean is_previewing = Manager.isPreviewing();
-			if (is_previewing) {
-				Manager.stopPreview();
+			boolean ret = false;
+			if (Manager.getCurrentCameraId() == CameraID.CAMERA_BACK) {
+				ret = Manager.switchCamera(CameraID.CAMERA_FRONT);
 			} else {
-				Toast.makeText(activity.getBaseContext(), "只有在预览模式下才能切换摄像头！", Toast.LENGTH_SHORT)
-				.show();
-				return;
-			}
-			//查询更新摄像头列表
-			List<CameraID> list = Manager.inQuireCameras();
-			if (list.size() == 0 || (list.size() == 1 && list.get(0) == Manager.getCurrentCameraId())) {
-				Toast.makeText(activity.getBaseContext(), "没有更多的摄像头可供切换!", Toast.LENGTH_SHORT)
-				.show();
-				if (is_previewing) {
-					Manager.startPreview();
-				}
-				return;
-			}
-			Iterator<CameraID> it = list.iterator();
-			while(it.hasNext()) {
-				CameraID id = it.next();
-				if (id == Manager.getCurrentCameraId()) {
-					break;
-				}
-			}
-			CameraID new_id ;
-			if (it.hasNext()) {
-				new_id = it.next();
-			} else {
-				new_id = list.get(0);
-			}
-			Log.i(TAG, "switch camera to " + new_id.toString());
-			Manager.stopPreview();
-			Manager.setCameraId(new_id);
-			if (is_previewing) {
-				Manager.startPreview();
+				ret = Manager.switchCamera(CameraID.CAMERA_BACK);
 			}
 		}
 	};
