@@ -16,6 +16,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import cn.com.xpai.core.Manager;
+import cn.com.xpai.core.Manager.RecordStatus;
 
 
 class Preview extends SurfaceView implements SurfaceHolder.Callback {
@@ -38,13 +39,21 @@ class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
+		Log.i(TAG, "Preview surfaceCreated!!!");
 		Manager.setPreviewSurface(this);
+		if (Manager.getRecordStatus() == RecordStatus.PAUSE) {
+		    Manager.resumeRecord();
+		    XPAndroid.mainHandler.sendEmptyMessage(MainHandler.MSG_SWITCH_BTN_VISIBILITY);
+		}
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.w(TAG, "Destroying surface!");
-		Manager.stopRecord();
-		Manager.stopPreview();
+		if (Manager.getRecordStatus() == RecordStatus.RECORDING) {
+		    Manager.pauseRecord();
+		} else {
+		    Manager.stopPreview();
+		}
 	}
 
 

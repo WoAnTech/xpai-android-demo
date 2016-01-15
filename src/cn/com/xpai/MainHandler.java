@@ -125,7 +125,7 @@ class MainHandler extends Handler {
 			btnPreview.setVisibility(View.INVISIBLE);
 			//btnChangeCamera.setVisibility(View.INVISIBLE);
 			btnSetting.setVisibility(View.INVISIBLE);
-			btnPlayer.setVisibility(View.INVISIBLE);
+			//btnPlayer.setVisibility(View.INVISIBLE);
 			//btnChangeCamera.setVisibility(View.INVISIBLE);
 			btnRecordPause.setVisibility(View.VISIBLE);
 			btnMute.setVisibility(View.VISIBLE);
