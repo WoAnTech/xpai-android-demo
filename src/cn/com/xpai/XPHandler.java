@@ -26,6 +26,7 @@ public class XPHandler extends AHandler {
 	public static final int NEED_LOGIN = 0x10031;
 	public static final int SHOW_MESSAGE = 0x10032;
 	public static final int MSG_CONNECTED = 0x10033;
+	public static final int MSG_DELAY_DISCONNECT = 0x10034;
 	
 	public boolean isRetryRecord = false;
 	public boolean isStartRecord = false;
@@ -79,6 +80,8 @@ public class XPHandler extends AHandler {
 			String text = bdl.getString("msg_content");
 			Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
 			break;
+		case MSG_DELAY_DISCONNECT:
+			Manager.disconnect();
 		default:
 			break;
 		}
@@ -340,4 +343,39 @@ public class XPHandler extends AHandler {
 		XPHandler.getInstance().sendMessage(msg);
 		return true;
 	}
+	
+	/*
+	 * 断线重连失败，此视频无法续传,可能原因是续传已经超时
+	 */
+	@Override
+	public boolean onResumeLiveFail(int error_code) {
+		Message msg = new Message();
+		msg.what = SHOW_MESSAGE;
+		Bundle bdl = new Bundle();
+		bdl.putString(MSG_CONTENT, "重连失败，当前直播无法续传，放弃重连服务器!");
+		msg.setData(bdl);
+		XPHandler.getInstance().sendMessage(msg);		
+		return true;
+	}
+	
+	/*
+	 * 正在尝试断线续传
+	 */
+	@Override
+	public boolean onTryResumeLive() {
+		Log.i(TAG, "网络错误，正在尝试恢复直播");
+		return true;
+	}
+	
+	public void onResumeLiveOk() {
+		Message msg = new Message();
+		msg.what = SHOW_MESSAGE;
+		Bundle bdl = new Bundle();
+		bdl.putString(MSG_CONTENT, "恢复直播成功");
+		msg.setData(bdl);
+		XPHandler.getInstance().sendMessage(msg);
+		//自动测试断线重连, 过5秒后自动断线
+		//getInstance().sendEmptyMessageDelayed(MSG_DELAY_DISCONNECT, 5000);
+	}
+
 }

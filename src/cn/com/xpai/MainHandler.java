@@ -162,7 +162,11 @@ class MainHandler extends Handler {
 		public void onClick(View arg0) {
 			if (Manager.isConnected()) {
 				// 调用对话框，询问是否要断开连接
-				DialogFactory.confirmDialog("确认要断开网络连接？",
+				String title = "断开网络连接";
+				if (Manager.RecordStatus.RECORDING == Manager.getRecordStatus()) {
+					title = "模拟断网测试";
+				}
+				DialogFactory.confirmDialog("模拟断网", "确认要断开网络连接？",
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog,

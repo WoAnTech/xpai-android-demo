@@ -325,10 +325,10 @@ public class DialogFactory {
 		return loginDialog;
 	}
 	
-	static void confirmDialog(String title, DialogInterface.OnClickListener yesListenser) {
+	static void confirmDialog(String title, String msg, DialogInterface.OnClickListener yesListenser) {
 		AlertDialog.Builder builder = new Builder(mContext);
-		builder.setMessage(title);
-		builder.setTitle("提示");
+		builder.setMessage(msg);
+		builder.setTitle(title);
 		builder.setPositiveButton(R.string.dialog_confirm, yesListenser);
 
 		builder.setNegativeButton(R.string.dialog_cancel,
