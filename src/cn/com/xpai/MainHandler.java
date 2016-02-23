@@ -255,8 +255,6 @@ class MainHandler extends Handler {
 		@Override
 		public void onClick(View arg0) {
 			Log.i(TAG, "mute btn clicked");
-			if(Config.recordMode == RecordMode.HwOnlyVideo || Config.recordMode == RecordMode.HwVideoSwAudio
-					||Config.recordMode == RecordMode.SwAudioAndVideo || Config.recordMode == RecordMode.SwOnlyAudio) {
 				boolean onoff = Manager.isMute();
 				if (onoff) {
 					btnMute.setBackgroundResource(R.drawable.mic_mute);
@@ -264,10 +262,6 @@ class MainHandler extends Handler {
 					btnMute.setBackgroundResource(R.drawable.mic);
 				}
 				Manager.toggleMute(!onoff);
-			} else {
-				Toast.makeText(activity.getBaseContext(), "只有音频为软编的模式下才能进行麦克风操作！", Toast.LENGTH_SHORT)
-				.show();
-			}
 		}
 	};
 	
