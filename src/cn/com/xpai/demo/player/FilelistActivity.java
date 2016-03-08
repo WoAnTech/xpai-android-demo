@@ -219,7 +219,6 @@ public class FilelistActivity extends Activity {
 					String prefix = Globals.getExtensionName(fullPath);
 					if (Globals.getFileFilter().contains(prefix)) {
 						// String fileName = Globals.getFileName(fullPath);
-						System.out.println("---" + fullPath);
 						File f = new File(fullPath);
 						String fileName = f.getName();
 						long size = f.length();

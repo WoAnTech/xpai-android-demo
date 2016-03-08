@@ -162,14 +162,12 @@ public class Globals {
     
     public static void execSql(String sql, Context context){
     	SQLiteDatabase conn = getDbConn(context);
-   	 	ShowLog(sql);
    	 	conn.execSQL(sql);
     }
     
     public static int execSqlRetInt(String sql, Context context){
     	int ret = -1;
     	SQLiteDatabase conn = Globals.getDbConn(context);
-   	 	ShowLog(sql);
    		Cursor result=conn.rawQuery(sql, null); 
     	result.moveToFirst(); 
     	while (!result.isAfterLast()) { 
