@@ -115,12 +115,11 @@ public class XPAndroid extends Activity {
 		mPreview.setZOrderOnTop(false);
 		mainHandler = new MainHandler(this);
 		
-		/* 竖屏拍摄模式，请将注释打开
+		//竖屏拍摄模式
 		Manager.updateOrientation(90);
 		if (!Manager.forcePortrait(true)) {
 			Log.w(TAG, "force portrait record fail");
 		}
-		*/
 	}
 
 	/* Creates the menu items */
@@ -219,7 +218,7 @@ public class XPAndroid extends Activity {
 			// Manager.uploadVideoFile(..., false)
 			// 第二个参数为 false代表新上传一个文件, 服务器总是将上传的数据存为一个新的视频文件
 			// 第二个参数为 true 代表续传
-			if (!Manager.uploadVideoFile(file_name, requestCode == 1)) {
+			if (!Manager.uploadVideoFile(file_name, requestCode == 1, null)) {
 				// todo 错误处理
 				Log.w(TAG, "Upload file failed.");
 			}
