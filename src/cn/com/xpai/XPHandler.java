@@ -1,7 +1,6 @@
 package cn.com.xpai;
 
 import cn.com.xpai.core.AHandler;
-import cn.com.xpai.core.Const;
 import cn.com.xpai.core.Manager;
 import android.content.Context;
 import android.os.Bundle;

@@ -116,7 +116,6 @@ public class XPAndroid extends Activity {
 		mainHandler = new MainHandler(this);
 		
 		//竖屏拍摄模式
-		Manager.updateOrientation(90);
 		if (!Manager.forcePortrait(true)) {
 			Log.w(TAG, "force portrait record fail");
 		}
