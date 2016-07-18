@@ -116,9 +116,36 @@ public class XPAndroid extends Activity {
 		mainHandler = new MainHandler(this);
 		
 		//竖屏拍摄模式
-		if (!Manager.forcePortrait(true)) {
-			Log.w(TAG, "force portrait record fail");
+//		if (!Manager.forcePortrait(true)) {
+//			Log.w(TAG, "force portrait record fail");
+//		}
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			Manager.forcePortrait(false);
+			Log.e(TAG, "横屏拍摄 111");
+		} else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			Manager.forcePortrait(true);
+			Log.e(TAG, "竖屏拍摄 222");
 		}
+	}
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+	    // TODO Auto-generated method stub
+	    super.onConfigurationChanged(newConfig);
+	    if (Manager.getRecordStatus() == Manager.RecordStatus.IDLE) {//在未录制状态
+	        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+	            Log.e(TAG, "竖屏");
+	            Manager.stopPreview();
+	            Manager.forcePortrait(true);
+	            Manager.startPreview();
+	        } else {
+	            Log.e(TAG, "横屏");
+	            Manager.stopPreview();
+	            Manager.forcePortrait(false);
+	            Manager.startPreview();
+	        }
+	    } else {
+	        Toast.makeText(this, "正处于录制状态无法进行横竖屏切换", Toast.LENGTH_LONG).show();
+	    }
 	}
 
 	/* Creates the menu items */
